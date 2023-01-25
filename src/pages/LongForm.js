@@ -2,7 +2,8 @@ import React, { useReducer } from "react";
 import { initialState, reducer } from "../state/formReducer";
 
 const LongForm = () => {
-    // const [state, dispatch] = useReducer(reducer, initialState);
+    
+    
     const initialState = {
         firstName: "",
         lastName: "",

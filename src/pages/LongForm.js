@@ -2,8 +2,6 @@ import React, { useReducer } from "react";
 import { initialState, reducer } from "../state/formReducer";
 
 const LongForm = () => {
-    
-    
     const initialState = {
         firstName: "",
         lastName: "",
@@ -12,7 +10,7 @@ const LongForm = () => {
         education: "",
         quantity: 0,
         feedback: "",
-        term: true,
+        term: false,
     };
     const reducer = (state, action) => {
         switch (action.type) {
@@ -21,6 +19,21 @@ const LongForm = () => {
                     ...state,
                     [action.payload.name]: action.payload.value,
                 };
+            case "TOGGLE":
+                return {
+                    ...state,
+                    term: !state.term,
+                };
+                case "INCREASE":
+                    return {
+                        ...state,
+                        quantity: state.quantity++,
+                };
+                case "DECREASE":
+                    return {
+                        ...state,
+                        quantity: state.quantity--,
+                    };
 
             default:
                 return state;
@@ -56,6 +69,7 @@ const LongForm = () => {
                         }
                     />
                 </div>
+
                 <div className="flex flex-col w-full max-w-xs">
                     <label className="mb-2" htmlFor="lastName">
                         Last Name
@@ -72,6 +86,7 @@ const LongForm = () => {
                         }
                     />
                 </div>
+
                 <div className="flex flex-col w-full max-w-xs">
                     <label className="mb-2" htmlFor="email">
                         Email
@@ -88,6 +103,7 @@ const LongForm = () => {
                         }
                     />
                 </div>
+
                 <div className="flex flex-col w-full max-w-xs">
                     <h1 className="mb-3">Gender</h1>
                     <div className="flex gap-3">
@@ -144,6 +160,7 @@ const LongForm = () => {
                         </div>
                     </div>
                 </div>
+
                 <div className="flex flex-col w-full max-w-xs">
                     <label className="mb-3" for="education">
                         Education
@@ -164,16 +181,31 @@ const LongForm = () => {
                         <option value="graduate">Graduate</option>
                     </select>
                 </div>
+
                 <div className="flex flex-col w-full max-w-xs">
                     <label className="mb-3">Number of PCs</label>
                     <div className="flex justify-between items-center gap-2 ">
-                        <button className="bg-indigo-500 text-lg text-white rounded h-10 w-10 ">
+                        <button
+                            className="bg-indigo-500 text-lg text-white rounded h-10 w-10 "
+                            onClick={(e) =>
+                                dispatch({
+                                    type: "DECREASE",
+                                })
+                            }
+                        >
                             -
                         </button>
                         <div className="border flex-1 flex justify-center items-center h-10 rounded-md border-gray-300">
-                            <span className="text-lg">0</span>
+                            <span className="text-lg">{state.quantity}</span>
                         </div>
-                        <button className="bg-indigo-500 text-lg text-white rounded h-10 w-10">
+                        <button
+                            className="bg-indigo-500 text-lg text-white rounded h-10 w-10"
+                            onClick={(e) =>
+                                dispatch({
+                                    type: "INCREASE",
+                                })
+                            }
+                        >
                             +
                         </button>
                     </div>
@@ -198,12 +230,23 @@ const LongForm = () => {
 
                 <div className="flex justify-between items-center w-full">
                     <div className="flex  w-full max-w-xs">
-                        <input className="mr-3" type="checkbox" name="term" id="terms" />
+                        <input
+                            className="mr-3"
+                            type="checkbox"
+                            name="term"
+                            id="terms"
+                            onClick={(e) =>
+                                dispatch({
+                                    type: "TOGGLE",
+                                })
+                            }
+                        />
                         <label for="terms">I agree to terms and conditions</label>
                     </div>
                     <button
                         className=" px-4 py-3 bg-indigo-500 rounded-md font-semibold text-white text-lg disabled:bg-gray-500"
                         type="submit"
+                        disabled={!state.term}
                     >
                         Submit
                     </button>
